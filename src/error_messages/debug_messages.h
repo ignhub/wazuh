@@ -256,6 +256,7 @@
 #define FIM_DIFF_FOLDER_DELETED             "(6358): Folder '%s' has been deleted."
 #define GLOB_NO_MATCH                       "(6359): No matches found for the glob pattern: '%s'"
 #define FIM_DB_FAIL_TO_GET_SCANNED_FILE     "(6360): Failed to get scanned value of '%s' - %s"
+#define FIM_ADDED_RULE_TO_FILE              "(6361): Added directory '%s' to audit rules file."
 
 /* Modules messages */
 #define WM_UPGRADE_RESULT_AGENT_INFO         "(8151): Agent Information obtained: '%s'"
