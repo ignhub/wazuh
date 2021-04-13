@@ -223,7 +223,7 @@ void audit_create_rules_file() {
         }
     }
 
-    mdebug2(FIM_AUDIT_CREATED_RULE_FILE);
+    minfo(FIM_AUDIT_CREATED_RULE_FILE);
 }
 
 void audit_rules_to_realtime() {
