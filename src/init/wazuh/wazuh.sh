@@ -134,7 +134,7 @@ WazuhUpgrade()
     rm -rf $DIRECTORY/queue/ossec
 
 	# Move rotated logs to new folder and remove the existing one
-	
+
 	if [ -d $DIRECTORY/logs/ossec ]; then
 		if [ "$(ls -A $DIRECTORY/logs/ossec)" ]; then
 			mv -f $DIRECTORY/logs/ossec/* $DIRECTORY/logs/wazuh
@@ -196,5 +196,10 @@ WazuhUpgrade()
     if [ -f /etc/ossec-init.conf ]; then
         rm -f $DIRECTORY/etc/ossec-init.conf
         rm -f /etc/ossec-init.conf
+    fi
+
+    # Remove unnecessary `execa` socket
+    if [ -f "$DIRECTORY/queue/alerts/execa" ]; then
+        rm -f $DIRECTORY/queue/alerts/execa
     fi
 }
