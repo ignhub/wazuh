@@ -57,7 +57,7 @@ def test_manager():
 
 manager_status = {'wazuh-agentlessd': 'running', 'wazuh-analysisd': 'running', 'wazuh-authd': 'running',
  'wazuh-csyslogd': 'running', 'wazuh-dbd': 'running', 'wazuh-monitord': 'running',
- 'wazuh-execd': 'running', 'wazuh-integratord': 'running', 'wazuh-logcollector': 'running',
+ 'wazuh-integratord': 'running', 'wazuh-logcollector': 'running',
  'wazuh-maild': 'running', 'wazuh-remoted': 'running', 'wazuh-reportd': 'running',
  'wazuh-syscheckd': 'running', 'wazuh-clusterd': 'running', 'wazuh-modulesd': 'running',
  'wazuh-db': 'running', 'wazuh-apid': 'running'}
@@ -80,7 +80,6 @@ def test_get_status(mock_status):
     ('wazuh-modulesd:syscollector', None, 2, None, None, ''),
     ('wazuh-modulesd:syscollector', None, 2, None, None, ''),
     ('wazuh-modulesd:aws-s3', None, 5, None, None, ''),
-    ('wazuh-execd', None, 1, None, None, ''),
     ('wazuh-csyslogd', None, 2, None, None, ''),
     ('random', None, 0, ['timestamp'], True, ''),
     (None, 'info', 7, ['timestamp'], False, ''),
@@ -130,7 +129,6 @@ def test_ossec_log_summary():
     """Tests ossec_log_summary function works and returned data match with expected"""
     expected_result = {
         'wazuh-csyslogd': {'all': 2, 'info': 2, 'error': 0, 'critical': 0, 'warning': 0, 'debug': 0},
-        'wazuh-execd': {'all': 1, 'info': 0, 'error': 1, 'critical': 0, 'warning': 0, 'debug': 0},
         'wazuh-modulesd:aws-s3': {'all': 5, 'info': 2, 'error': 1, 'critical': 0, 'warning': 2, 'debug': 0},
         'wazuh-modulesd:database': {'all': 2, 'info': 0, 'error': 0, 'critical': 0, 'warning': 0, 'debug': 2},
         'wazuh-modulesd:syscollector': {'all': 2, 'info': 2, 'error': 0, 'critical': 0, 'warning': 0, 'debug': 0},
@@ -265,19 +263,6 @@ def test_validation_ko(mosck_exists, mock_lockf, mock_open):
                     with patch('socket.socket.recv', side_effect=socket.timeout):
                         with pytest.raises(WazuhInternalError, match='.* 1014 .*'):
                             validation()
-
-                    # _parse_execd_output raise KeyError
-                    with patch('socket.socket.recv'):
-                        with patch('wazuh.core.manager.parse_execd_output', side_effect=KeyError):
-                            with pytest.raises(WazuhInternalError, match='.* 1904 .*'):
-                                validation()
-
-                    # _parse_execd_output raise WazuhError
-                    with patch('socket.socket') as sock:
-                        json_response = json.dumps({'error': 1, 'message': 'test_error'}).encode()
-                        sock.return_value.recv.return_value = json_response
-                        result = validation()
-                        assert result.total_failed_items == 1
 
 
 @patch('wazuh.core.configuration.get_active_configuration')
