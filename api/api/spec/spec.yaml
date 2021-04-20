@@ -1936,8 +1936,6 @@ components:
           $ref: '#/components/schemas/DaemonStatus'
         wazuh-integratord:
           $ref: '#/components/schemas/DaemonStatus'
-        wazuh-logcollector:
-          $ref: '#/components/schemas/DaemonStatus'
         wazuh-maild:
           $ref: '#/components/schemas/DaemonStatus'
         wazuh-monitord:
@@ -2403,7 +2401,6 @@ components:
             - wazuh-integratord
             - wazuh-maild
             - wazuh-monitord
-            - wazuh-logcollector
             - wazuh-remoted
             - wazuh-reportd
             - wazuh-rootcheck
@@ -2486,8 +2483,6 @@ components:
           wazuh-maild:
             $ref: '#/components/schemas/LogSummary'
           wazuh-monitord:
-            $ref: '#/components/schemas/LogSummary'
-          wazuh-logcollector:
             $ref: '#/components/schemas/LogSummary'
           wazuh-remoted:
             $ref: '#/components/schemas/LogSummary'
@@ -4599,7 +4594,6 @@ components:
         - wazuh-integratord
         - wazuh-maild
         - wazuh-monitord
-        - wazuh-logcollector
         - wazuh-remoted
         - wazuh-reportd
         - wazuh-rootcheck
@@ -8099,7 +8093,6 @@ paths:
                       wazuh-csyslogd: stopped
                       wazuh-dbd: stopped
                       wazuh-integratord: stopped
-                      wazuh-logcollector: running
                       wazuh-maild: stopped
                       wazuh-monitord: running
                       wazuh-remoted: running
@@ -9528,7 +9521,6 @@ paths:
                       wazuh-csyslogd: stopped
                       wazuh-dbd: stopped
                       wazuh-integratord: stopped
-                      wazuh-logcollector: running
                       wazuh-maild: stopped
                       wazuh-monitord: running
                       wazuh-remoted: running
