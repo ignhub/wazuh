@@ -2143,7 +2143,8 @@ class AWSService(WazuhIntegration):
     """
 
     def __init__(self, access_key, secret_key, aws_profile, iam_role_arn,
-                 service_name, only_logs_after, region, aws_log_groups=None, remove_log_streams=None):
+                 service_name, only_logs_after, region, aws_log_groups=None, remove_log_streams=None,
+                 discard_field=None, discard_regex=None):
         # DB name
         self.db_name = 'aws_services'
         # table name
@@ -2151,7 +2152,8 @@ class AWSService(WazuhIntegration):
 
         WazuhIntegration.__init__(self, access_key=access_key, secret_key=secret_key,
                                   aws_profile=aws_profile, iam_role_arn=iam_role_arn,
-                                  service_name=service_name, region=region)
+                                  service_name=service_name, region=region, discard_field=discard_field,
+                                  discard_regex=discard_regex)
 
         # get sts client (necessary for getting account ID)
         self.sts_client = self.get_sts_client(access_key, secret_key, aws_profile)
@@ -2247,7 +2249,7 @@ class AWSInspector(AWSService):
 
     def __init__(self, reparse, access_key, secret_key, aws_profile,
                  iam_role_arn, only_logs_after, region, aws_log_groups=None,
-                 remove_log_streams=None):
+                 remove_log_streams=None, discard_field=None, discard_regex=None):
 
         self.service_name = 'inspector'
         self.inspector_region = region
@@ -2255,7 +2257,8 @@ class AWSInspector(AWSService):
         AWSService.__init__(self, access_key=access_key, secret_key=secret_key,
                             aws_profile=aws_profile, iam_role_arn=iam_role_arn, only_logs_after=only_logs_after,
                             service_name=self.service_name, region=region, aws_log_groups=aws_log_groups,
-                            remove_log_streams=remove_log_streams)
+                            remove_log_streams=remove_log_streams, discard_field=discard_field,
+                            discard_regex=discard_regex)
 
         # max DB records for region
         self.retain_db_records = 5
@@ -2367,7 +2370,7 @@ class AWSCloudWatchLogs(AWSService):
 
     def __init__(self, reparse, access_key, secret_key, aws_profile,
                  iam_role_arn, only_logs_after, region, aws_log_groups,
-                 remove_log_streams):
+                 remove_log_streams, discard_field=None, discard_regex=None):
 
         self.sql_cloudwatch_create_table = """
                                 CREATE TABLE
@@ -2440,7 +2443,7 @@ class AWSCloudWatchLogs(AWSService):
         AWSService.__init__(self, access_key=access_key, secret_key=secret_key,
                             aws_profile=aws_profile, iam_role_arn=iam_role_arn, only_logs_after=only_logs_after,
                             region=region, aws_log_groups=aws_log_groups, remove_log_streams=remove_log_streams,
-                            service_name='cloudwatchlogs')
+                            service_name='cloudwatchlogs', discard_field=discard_field, discard_regex=discard_regex)
 
         self.region = region
         self.db_table_name = 'cloudwatch_logs'
@@ -2969,7 +2972,8 @@ def main(argv):
                                        region=region,
                                        aws_log_groups=options.aws_log_groups,
                                        remove_log_streams=options.deleteLogStreams,
-                                       filter_conditions=options.filter_conditions
+                                       discard_field=options.discard_field,
+                                       discard_regex=options.discard_regex
                                        )
                 service.get_alerts()
 
